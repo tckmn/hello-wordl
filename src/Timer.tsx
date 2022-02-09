@@ -17,7 +17,7 @@ export function Timer(props: TimerProps) {
         fastest = Math.min.apply(0, diffs),
         total = diffs.length === props.count ? diffs.reduce((x,y) => x+y) : undefined;
 
-  if (total !== undefined && (best.current === undefined || total > best.current)) {
+  if (total !== undefined && (best.current === undefined || total < best.current)) {
     best.current = total;
   }
 
