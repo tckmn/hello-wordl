@@ -84,6 +84,37 @@ table.Game-rows > tbody {
   flex-direction: column;
 }
 
+.Game-timer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.Game-timer-bars {
+  display: flex;
+  align-items: end;
+  justify-content: center;
+}
+
+.Game-timer-bar-wrap {
+  width: 15px;
+  margin: 1px;
+  font-size: 6pt;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.Game-timer-bar {
+  width: 100%;
+}
+
+.Game-timer-stats {
+  font-size: 10pt;
+  text-align: right;
+  margin-left: 10px;
+}
+
 .Game-keyboard {
   display: flex;
   flex-direction: column;

@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { Row, RowState } from "./Row";
 import dictionary from "./dictionary.json";
 import { Clue, clue, describeClue, violation } from "./clue";
+import { Timer } from "./Timer";
 import { Keyboard } from "./Keyboard";
 import targetList from "./targets.json";
 import {
@@ -99,6 +100,7 @@ function Game(props: GameProps) {
       ? `Invalid challenge string, playing random game.`
       : `Make your first guess!`
   );
+  const [times, setTimes] = useState<number[]>([+new Date()]);
   const currentSeedParams = () =>
     `?seed=${seed}&length=${wordLength}&game=${gameNumber}`;
   useEffect(() => {
@@ -199,6 +201,7 @@ function Game(props: GameProps) {
       if (currentGuess === target) {
         setHint(gameOver("won"));
         setGameState(GameState.Won);
+        setTimes([...times, +new Date()]);
       } else if (guesses.length + 1 === props.maxGuesses) {
         setHint(gameOver("lost"));
         setGameState(GameState.Lost);
@@ -258,6 +261,7 @@ function Game(props: GameProps) {
 
   return (
     <div className="Game" style={{ display: props.hidden ? "none" : "block" }}>
+      <Timer count={10} times={times} />
       <div className="Game-options">
         <label htmlFor="wordLength">Letters:</label>
         <input
