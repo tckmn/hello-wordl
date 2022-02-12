@@ -100,7 +100,9 @@ function Game(props: GameProps) {
       ? `Invalid challenge string, playing random game.`
       : `Make your first guess!`
   );
-  const [times, setTimes] = useState<number[]>([+new Date()]);
+  const now = +new Date();
+  const [times, setTimes] = useState<number[]>([now]);
+  const [lastTime, setLastTime] = useState<number>(now);
   const currentSeedParams = () =>
     `?seed=${seed}&length=${wordLength}&game=${gameNumber}`;
   useEffect(() => {
@@ -201,10 +203,15 @@ function Game(props: GameProps) {
       if (currentGuess === target) {
         setHint(gameOver("won"));
         setGameState(GameState.Won);
-        setTimes([...times, +new Date()]);
+        const time = +new Date(), dur = lastTime - time;
+        setTimes(times => [...times, time]);
+        setLastTime(time);
+        localStorage.setItem('log', (localStorage.getItem('log') || '') + ',' + target + ' ' + dur.toFixed(3));
       } else if (guesses.length + 1 === props.maxGuesses) {
         setHint(gameOver("lost"));
         setGameState(GameState.Lost);
+        setLastTime(+new Date());
+        localStorage.setItem('log', (localStorage.getItem('log') || '') + ',' + target + ' 0');
       } else {
         setHint("");
         speak(describeClue(clue(currentGuess, target)));
