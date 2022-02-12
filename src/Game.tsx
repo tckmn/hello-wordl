@@ -203,10 +203,10 @@ function Game(props: GameProps) {
       if (currentGuess === target) {
         setHint(gameOver("won"));
         setGameState(GameState.Won);
-        const time = +new Date(), dur = lastTime - time;
+        const time = +new Date(), dur = time - lastTime;
         setTimes(times => [...times, time]);
         setLastTime(time);
-        localStorage.setItem('log', (localStorage.getItem('log') || '') + ',' + target + ' ' + dur.toFixed(3));
+        localStorage.setItem('log', (localStorage.getItem('log') || '') + ',' + target + ' ' + dur);
       } else if (guesses.length + 1 === props.maxGuesses) {
         setHint(gameOver("lost"));
         setGameState(GameState.Lost);
