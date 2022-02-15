@@ -36,6 +36,7 @@ function App() {
     window.matchMedia("(prefers-color-scheme: dark)").matches;
   const [dark, setDark] = useSetting<boolean>("dark", prefersDark);
   const [colorBlind, setColorBlind] = useSetting<boolean>("colorblind", false);
+  const [topbar, setTopbar] = useSetting<boolean>("topbar", false);
   const [difficulty, setDifficulty] = useSetting<number>("difficulty", 0);
   const [keyboard, setKeyboard] = useSetting<string>(
     "keyboard",
@@ -68,15 +69,7 @@ function App() {
   return (
     <div className={"App-container" + (colorBlind ? " color-blind" : "")}>
       <h1>
-        <span
-          style={{
-            color: difficulty > 0 ? "#e66" : "inherit",
-            fontStyle: difficulty > 1 ? "italic" : "inherit",
-          }}
-        >
-          hell
-        </span>
-        o wordl
+          speedle
       </h1>
       <div className="top-right">
         {page !== "game" ? (
@@ -88,6 +81,7 @@ function App() {
           </>
         )}
       </div>
+      {/*
       <div
         style={{
           position: "absolute",
@@ -100,6 +94,7 @@ function App() {
           {seed ? "Random" : "Today's"}
         </a>
       </div>
+      */}
       {page === "about" && <About />}
       {page === "settings" && (
         <div className="Settings">
@@ -120,6 +115,15 @@ function App() {
               onChange={() => setColorBlind((x: boolean) => !x)}
             />
             <label htmlFor="colorblind-setting">Color blind mode</label>
+          </div>
+          <div className="Settings-setting">
+            <input
+              id="topbar-setting"
+              type="checkbox"
+              checked={topbar}
+              onChange={() => setTopbar((x: boolean) => !x)}
+            />
+            <label htmlFor="topbar-setting">Old speedrun timer style</label>
           </div>
           <div className="Settings-setting">
             <input
@@ -181,6 +185,7 @@ function App() {
         hidden={page !== "game"}
         difficulty={difficulty}
         colorBlind={colorBlind}
+        topbar={topbar}
         keyboardLayout={keyboard.replaceAll(
           /[BE]/g,
           (x) => (enterLeft ? "EB" : "BE")["BE".indexOf(x)]

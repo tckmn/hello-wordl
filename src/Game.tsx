@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { Row, RowState } from "./Row";
 import dictionary from "./dictionary.json";
 import { Clue, clue, describeClue, violation } from "./clue";
-import { Timer } from "./Timer";
+import { Timer, Timer2, Time } from "./Timer";
 import { Keyboard } from "./Keyboard";
 import targetList from "./targets.json";
 import {
@@ -28,6 +28,7 @@ interface GameProps {
   hidden: boolean;
   difficulty: Difficulty;
   colorBlind: boolean;
+  topbar: boolean;
   keyboardLayout: string;
 }
 
@@ -100,9 +101,11 @@ function Game(props: GameProps) {
       ? `Invalid challenge string, playing random game.`
       : `Make your first guess!`
   );
-  const now = +new Date();
-  const [times, setTimes] = useState<number[]>([now]);
-  const [lastTime, setLastTime] = useState<number>(now);
+  const [times, setTimes] = useState<Time[]>([{
+    word: '',
+    time: +new Date(),
+    correct: true
+  }]);
   const currentSeedParams = () =>
     `?seed=${seed}&length=${wordLength}&game=${gameNumber}`;
   useEffect(() => {
@@ -203,14 +206,21 @@ function Game(props: GameProps) {
       if (currentGuess === target) {
         setHint(gameOver("won"));
         setGameState(GameState.Won);
-        const time = +new Date(), dur = time - lastTime;
-        setTimes(times => [...times, time]);
-        setLastTime(time);
+        const time = +new Date(), dur = time - times[times.length-1].time;
+        setTimes(times => [...times, {
+          word: target,
+          time: time,
+          correct: true
+        }]);
         localStorage.setItem('log', (localStorage.getItem('log') || '') + ',' + target + ' ' + dur);
       } else if (guesses.length + 1 === props.maxGuesses) {
         setHint(gameOver("lost"));
         setGameState(GameState.Lost);
-        setLastTime(+new Date());
+        setTimes(times => [...times, {
+          word: target,
+          time: +new Date(),
+          correct: false
+        }]);
         localStorage.setItem('log', (localStorage.getItem('log') || '') + ',' + target + ' 0');
       } else {
         setHint("");
@@ -268,7 +278,7 @@ function Game(props: GameProps) {
 
   return (
     <div className="Game" style={{ display: props.hidden ? "none" : "block" }}>
-      <Timer count={10} times={times} />
+      {/*props.topbar && */<Timer count={10} times={times} />}
       <div className="Game-options">
         <label htmlFor="wordLength">Letters:</label>
         <input
@@ -307,14 +317,21 @@ function Game(props: GameProps) {
           Give up
         </button>
       </div>
-      <table
-        className="Game-rows"
-        tabIndex={0}
-        aria-label="Table of guesses"
-        ref={tableRef}
-      >
-        <tbody>{tableRows}</tbody>
-      </table>
+      <div className="Game-main">
+        <table
+          className="Game-rows"
+          tabIndex={0}
+          aria-label="Table of guesses"
+          ref={tableRef}
+        >
+          <tbody>{tableRows}</tbody>
+        </table>
+        {/*!props.topbar && <div
+          className="Game-new-sidebar"
+        >
+          <Timer2 times={times} />
+          </div>*/}
+      </div>
       <p
         role="alert"
         style={{
@@ -330,13 +347,15 @@ function Game(props: GameProps) {
         onKey={onKey}
       />
       <div className="Game-seed-info">
-        {challenge
-          ? "playing a challenge game"
-          : seed
-          ? `${describeSeed(seed)} — length ${wordLength}, game ${gameNumber}`
-          : "playing a random game"}
+        forked from
+        {" "}
+        <a href="https://hellowordl.net">hello wordl</a>
+        {" "}
+        by
+        {" "}
+        <a href="https://twitter.com/chordbug">Lynn / @chordbug</a>
       </div>
-      <p>
+      {/*<p>
         <button
           onClick={() => {
             share("Link copied to clipboard!");
@@ -366,6 +385,7 @@ function Game(props: GameProps) {
           </button>
         )}
       </p>
+      */}
     </div>
   );
 }
