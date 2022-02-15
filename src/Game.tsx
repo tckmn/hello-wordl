@@ -139,10 +139,10 @@ function Game(props: GameProps) {
     doAutoguess();
   };
 
+  const autoguesses =
+    props.autoguess.toLowerCase().replace(/[^a-z]+/g, ' ').split(' ').filter(x => x);
   const doAutoguess = () => {
-    props.autoguess.toLowerCase().replace(/[^a-z]+/g, ' ').split(' ').forEach(x => {
-      if (x) submit(x);
-    });
+    autoguesses.forEach(x => submit(x, true));
   };
 
   useEffect(doAutoguess, []);
@@ -182,14 +182,16 @@ function Game(props: GameProps) {
     }
     if (guesses.length === props.maxGuesses) return;
     if (/^[a-z]$/i.test(key)) {
+      let failed = false;
       if (props.autoenter && currentGuess.length === wordLength - 1) {
         if (submit(currentGuess + key.toLowerCase()) === 1) return;
+        else failed = true;
       }
       setCurrentGuess((guess) =>
         (guess + key.toLowerCase()).slice(0, wordLength)
       );
       tableRef.current?.focus();
-      setHint("");
+      if (!failed) setHint("");
     } else if (key === "Backspace") {
       setCurrentGuess((guess) => guess.slice(0, -1));
       setHint("");
@@ -198,7 +200,7 @@ function Game(props: GameProps) {
     }
   };
 
-  const submit = (guess: string) => {
+  const submit = (guess: string, autoing: boolean = false) => {
     if (guess.length !== wordLength) {
       setHint("Too short");
       return;
@@ -234,7 +236,7 @@ function Game(props: GameProps) {
       }]);
       localStorage.setItem('log', (localStorage.getItem('log') || '') + ',' + target + ' ' + dur);
       if (props.autoenter) startNextGame();
-    } else if (guesses.length + 1 === props.maxGuesses) {
+    } else if (guesses.length + 1 === props.maxGuesses && !autoing) {
       setHint(gameOver("lost"));
       setGameState(GameState.Lost);
       setTimes(times => [...times, {
@@ -243,13 +245,20 @@ function Game(props: GameProps) {
         correct: false
       }]);
       localStorage.setItem('log', (localStorage.getItem('log') || '') + ',' + target + ' 0');
-      if (props.autoenter) startNextGame();
+      // if (props.autoenter) startNextGame();
     } else {
-      setHint("");
+      if (!autoing) setHint("");
       speak(describeClue(clue(guess, target)));
     }
     return 1;
   };
+
+  const diffstring =
+    props.difficulty === Difficulty.Normal ? 'N' :
+    props.difficulty === Difficulty.Hard ? 'H' :
+    props.difficulty === Difficulty.UltraHard ? 'U' : '';
+  const autostring = `a${props.autoenter ? 1 : 0}${autoguesses.length}`;
+  const mode = `v01-${props.runlen}-${diffstring}-${autostring}`;
 
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
@@ -351,7 +360,7 @@ function Game(props: GameProps) {
         {!props.topbar && <div
           className="Game-new-sidebar"
         >
-          <Timer2 count={props.runlen} times={times} />
+          <Timer2 count={props.runlen} times={times} mode={mode} />
         </div>}
       </div>
       <p

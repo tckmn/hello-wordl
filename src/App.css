@@ -329,6 +329,14 @@ a:active {
   overflow-y: auto;
 }
 
+.Game-timer2-stats {
+  display: flex;
+}
+
+.Game-timer2-stats > span.spacer {
+  flex: 1;
+}
+
 .Game-timer2-round {
   display: flex;
   align-items: center;

@@ -8,6 +8,7 @@ interface TimerProps {
 interface Timer2Props {
   count: number;
   times: Time[];
+  mode: string;
 }
 
 export interface Time {
@@ -141,7 +142,18 @@ export function Timer2(props: Timer2Props) {
         }).reverse()}
       </div>
       <div className="Game-timer2-stats">
-        last {props.count}: {total?.toFixed(2)} (best: {best.current.time ? best.current.time.toFixed(2) : ''})
+        <span>
+          last {props.count}: {total?.toFixed(2)}
+        </span>
+        <span className="spacer"></span>
+        <span>
+          best: {best.current.time ? best.current.time.toFixed(2) : ''}
+        </span>
+      </div>
+      <div className="Game-timer2-stats">
+        <span className="spacer"></span>
+        <span>{props.mode}</span>
+        <span className="spacer"></span>
       </div>
     </div>
   );
