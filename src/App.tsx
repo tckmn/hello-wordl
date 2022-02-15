@@ -114,7 +114,7 @@ function App() {
               checked={colorBlind}
               onChange={() => setColorBlind((x: boolean) => !x)}
             />
-            <label htmlFor="colorblind-setting">Color blind mode</label>
+            <label htmlFor="colorblind-setting">High-contrast colors</label>
           </div>
           <div className="Settings-setting">
             <input
