@@ -29,6 +29,8 @@ interface GameProps {
   difficulty: Difficulty;
   colorBlind: boolean;
   topbar: boolean;
+  autoenter: boolean;
+  runlen: number;
   keyboardLayout: string;
 }
 
@@ -170,6 +172,9 @@ function Game(props: GameProps) {
     }
     if (guesses.length === props.maxGuesses) return;
     if (/^[a-z]$/i.test(key)) {
+      if (props.autoenter && currentGuess.length === wordLength - 1) {
+        if (submit(currentGuess + key.toLowerCase()) === 1) return;
+      }
       setCurrentGuess((guess) =>
         (guess + key.toLowerCase()).slice(0, wordLength)
       );
@@ -179,54 +184,61 @@ function Game(props: GameProps) {
       setCurrentGuess((guess) => guess.slice(0, -1));
       setHint("");
     } else if (key === "Enter") {
-      if (currentGuess.length !== wordLength) {
-        setHint("Too short");
-        return;
-      }
-      if (!dictionary.includes(currentGuess)) {
-        setHint("Not a valid word");
-        return;
-      }
-      for (const g of guesses) {
-        const c = clue(g, target);
-        const feedback = violation(props.difficulty, c, currentGuess);
-        if (feedback) {
-          setHint(feedback);
-          return;
-        }
-      }
-      setGuesses((guesses) => guesses.concat([currentGuess]));
-      setCurrentGuess((guess) => "");
+      submit(currentGuess);
+    }
+  };
 
-      const gameOver = (verbed: string) =>
-        `You ${verbed}! The answer was ${target.toUpperCase()}. (Enter to ${
-          challenge ? "play a random game" : "play again"
-        })`;
-
-      if (currentGuess === target) {
-        setHint(gameOver("won"));
-        setGameState(GameState.Won);
-        const time = +new Date(), dur = time - times[times.length-1].time;
-        setTimes(times => [...times, {
-          word: target,
-          time: time,
-          correct: true
-        }]);
-        localStorage.setItem('log', (localStorage.getItem('log') || '') + ',' + target + ' ' + dur);
-      } else if (guesses.length + 1 === props.maxGuesses) {
-        setHint(gameOver("lost"));
-        setGameState(GameState.Lost);
-        setTimes(times => [...times, {
-          word: target,
-          time: +new Date(),
-          correct: false
-        }]);
-        localStorage.setItem('log', (localStorage.getItem('log') || '') + ',' + target + ' 0');
-      } else {
-        setHint("");
-        speak(describeClue(clue(currentGuess, target)));
+  const submit = (guess: string) => {
+    if (guess.length !== wordLength) {
+      setHint("Too short");
+      return;
+    }
+    if (!dictionary.includes(guess)) {
+      setHint("Not a valid word");
+      return;
+    }
+    for (const g of guesses) {
+      const c = clue(g, target);
+      const feedback = violation(props.difficulty, c, guess);
+      if (feedback) {
+        setHint(feedback);
+        return;
       }
     }
+    setGuesses((guesses) => guesses.concat([guess]));
+    setCurrentGuess((guess) => "");
+
+    const gameOver = (verbed: string) =>
+      `You ${verbed}! The answer was ${target.toUpperCase()}. (Enter to ${
+        challenge ? "play a random game" : "play again"
+      })`;
+
+    if (guess === target) {
+      setHint(gameOver("won"));
+      setGameState(GameState.Won);
+      const time = +new Date(), dur = time - times[times.length-1].time;
+      setTimes(times => [...times, {
+        word: target,
+        time: time,
+        correct: true
+      }]);
+      localStorage.setItem('log', (localStorage.getItem('log') || '') + ',' + target + ' ' + dur);
+      if (props.autoenter) startNextGame();
+    } else if (guesses.length + 1 === props.maxGuesses) {
+      setHint(gameOver("lost"));
+      setGameState(GameState.Lost);
+      setTimes(times => [...times, {
+        word: target,
+        time: +new Date(),
+        correct: false
+      }]);
+      localStorage.setItem('log', (localStorage.getItem('log') || '') + ',' + target + ' 0');
+      if (props.autoenter) startNextGame();
+    } else {
+      setHint("");
+      speak(describeClue(clue(guess, target)));
+    }
+    return 1;
   };
 
   useEffect(() => {
@@ -278,7 +290,7 @@ function Game(props: GameProps) {
 
   return (
     <div className="Game" style={{ display: props.hidden ? "none" : "block" }}>
-      {/*props.topbar && */<Timer count={10} times={times} />}
+      {props.topbar && <Timer count={props.runlen} times={times} />}
       <div className="Game-options">
         <label htmlFor="wordLength">Letters:</label>
         <input
@@ -326,11 +338,11 @@ function Game(props: GameProps) {
         >
           <tbody>{tableRows}</tbody>
         </table>
-        {/*!props.topbar && <div
+        {!props.topbar && <div
           className="Game-new-sidebar"
         >
-          <Timer2 times={times} />
-          </div>*/}
+          <Timer2 count={props.runlen} times={times} />
+        </div>}
       </div>
       <p
         role="alert"

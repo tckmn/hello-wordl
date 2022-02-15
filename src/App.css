@@ -230,12 +230,17 @@ a:active {
   align-items: top;
 }
 
-.Settings-setting input {
+.Settings-setting input[type="checkbox"] {
   width: 18px;
   height: 18px;
 }
 
 .Settings-setting input[type="range"] {
+  width: 50px;
+  height: 18px;
+}
+
+.Settings-setting input[type="number"] {
   width: 50px;
   height: 18px;
 }
@@ -309,12 +314,19 @@ a:active {
 
 
 .Game-timer2 {
-  overflow-y: auto;
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
+  display: flex;
+  flex-direction: column;
+  font-size: 8pt;
+}
+
+.Game-timer2-times {
+  flex: 1;
+  overflow-y: auto;
 }
 
 .Game-timer2-round {
@@ -331,7 +343,6 @@ a:active {
 .Game-timer2-bar {
   text-align: left;
   margin-left: 5px;
-  font-size: 8pt;
 }
 
 .Game-timer2-correct .Game-timer2-word {

@@ -37,6 +37,8 @@ function App() {
   const [dark, setDark] = useSetting<boolean>("dark", prefersDark);
   const [colorBlind, setColorBlind] = useSetting<boolean>("colorblind", false);
   const [topbar, setTopbar] = useSetting<boolean>("topbar", false);
+  const [autoenter, setAutoenter] = useSetting<boolean>("autoenter", false);
+  const [runlen, setRunlen] = useSetting<number>("runlen", 10);
   const [difficulty, setDifficulty] = useSetting<number>("difficulty", 0);
   const [keyboard, setKeyboard] = useSetting<string>(
     "keyboard",
@@ -127,6 +129,24 @@ function App() {
           </div>
           <div className="Settings-setting">
             <input
+              id="autoenter-setting"
+              type="checkbox"
+              checked={autoenter}
+              onChange={() => setAutoenter((x: boolean) => !x)}
+            />
+            <label htmlFor="autoenter-setting">Automatically press Enter</label>
+          </div>
+          <div className="Settings-setting">
+            <input
+              id="runlen-setting"
+              type="number"
+              value={runlen}
+              onChange={(e) => setRunlen(parseInt(e.target.value))}
+            />
+            <label htmlFor="runlen-setting">Run length</label>
+          </div>
+          <div className="Settings-setting">
+            <input
               id="difficulty-setting"
               type="range"
               min="0"
@@ -186,6 +206,8 @@ function App() {
         difficulty={difficulty}
         colorBlind={colorBlind}
         topbar={topbar}
+        autoenter={autoenter}
+        runlen={runlen}
         keyboardLayout={keyboard.replaceAll(
           /[BE]/g,
           (x) => (enterLeft ? "EB" : "BE")["BE".indexOf(x)]

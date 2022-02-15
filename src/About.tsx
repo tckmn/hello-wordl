@@ -6,12 +6,15 @@ export function About() {
   return (
     <div className="App-about">
       <p>
-        <i>hello wordl</i> is a remake of the word game{" "}
+        <i>speedle</i> is a fork of{' '}
+        <i><a href="https://hellowordl.net">hello wordl</a></i>{' '}
+        by <a href="https://twitter.com/chordbug">Lynn / @chordbug</a>,
+        which is a remake of the word game{" "}
         <a href="https://www.powerlanguage.co.uk/wordle/">
           <i>Wordle</i>
         </a>{" "}
         by <a href="https://twitter.com/powerlanguish">powerlanguage</a>, which
-        I think is based on the TV show <i>Lingo</i>.
+        is allegedly based on the TV show <i>Lingo</i>.
       </p>
       <p>
         You get {maxGuesses} tries to guess a target word.
@@ -72,14 +75,8 @@ export function About() {
       />
       <p>
         Report issues{" "}
-        <a href="https://github.com/lynn/hello-wordl/issues">here</a>, or tweet{" "}
-        <a href="https://twitter.com/chordbug">@chordbug</a>.
-      </p>
-      <p>
-        This game will be free and ad-free forever,
-        <br />
-        but you can <a href="https://ko-fi.com/chordbug">buy me a coffee</a> if
-        you'd like.
+        <a href="https://github.com/tckmn/speedle/issues">here</a>, or{' '}
+        <a href="https://tck.mn/contact">contact me</a>.
       </p>
     </div>
   );
