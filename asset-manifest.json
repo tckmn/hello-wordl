@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.css": "/speedle/static/css/main.3a3d4fd7.css",
-    "main.js": "/speedle/static/js/main.6a8d40c3.js",
+    "main.css": "/speedle/static/css/main.58951cba.css",
+    "main.js": "/speedle/static/js/main.2e57984b.js",
     "index.html": "/speedle/index.html",
-    "main.3a3d4fd7.css.map": "/speedle/static/css/main.3a3d4fd7.css.map",
-    "main.6a8d40c3.js.map": "/speedle/static/js/main.6a8d40c3.js.map"
+    "main.58951cba.css.map": "/speedle/static/css/main.58951cba.css.map",
+    "main.2e57984b.js.map": "/speedle/static/js/main.2e57984b.js.map"
   },
   "entrypoints": [
-    "static/css/main.3a3d4fd7.css",
-    "static/js/main.6a8d40c3.js"
+    "static/css/main.58951cba.css",
+    "static/js/main.2e57984b.js"
   ]
 }
