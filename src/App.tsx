@@ -45,6 +45,7 @@ function App() {
     "qwertyuiop-asdfghjkl-BzxcvbnmE"
   );
   const [enterLeft, setEnterLeft] = useSetting<boolean>("enter-left", false);
+  const [autoguess, setAutoguess] = useSetting<string>("autoguess", '');
 
   useEffect(() => {
     document.body.className = dark ? "dark" : "";
@@ -198,6 +199,16 @@ function App() {
             />
             <label htmlFor="enter-left-setting">"Enter" on left side</label>
           </div>
+          <div className="Settings-setting">
+            <label htmlFor="autoguess-setting">Automatically guess at start of game:</label>
+            <textarea
+              name="autoguess-setting"
+              id="autoguess-setting"
+              value={autoguess}
+              onChange={(e) => setAutoguess(e.target.value)}
+            >
+            </textarea>
+          </div>
         </div>
       )}
       <Game
@@ -208,6 +219,7 @@ function App() {
         topbar={topbar}
         autoenter={autoenter}
         runlen={runlen}
+        autoguess={autoguess}
         keyboardLayout={keyboard.replaceAll(
           /[BE]/g,
           (x) => (enterLeft ? "EB" : "BE")["BE".indexOf(x)]

@@ -32,6 +32,7 @@ interface GameProps {
   autoenter: boolean;
   runlen: number;
   keyboardLayout: string;
+  autoguess: string;
 }
 
 const targets = targetList.slice(0, targetList.indexOf("murky") + 1); // Words no rarer than this one
@@ -135,7 +136,16 @@ function Game(props: GameProps) {
     setCurrentGuess("");
     setGameState(GameState.Playing);
     setGameNumber((x) => x + 1);
+    doAutoguess();
   };
+
+  const doAutoguess = () => {
+    props.autoguess.toLowerCase().replace(/[^a-z]+/g, ' ').split(' ').forEach(x => {
+      if (x) submit(x);
+    });
+  };
+
+  useEffect(doAutoguess, []);
 
   async function share(copiedHint: string, text?: string) {
     const url = seed
