@@ -331,6 +331,7 @@ a:active {
 
 .Game-timer2-stats {
   display: flex;
+  user-select: text;
 }
 
 .Game-timer2-stats > span.spacer {
