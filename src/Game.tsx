@@ -140,7 +140,7 @@ function Game(props: GameProps) {
   };
 
   const autoguesses =
-    props.autoguess.toLowerCase().replace(/[^a-z]+/g, ' ').split(' ').filter(x => x);
+    props.autoguess.toLowerCase().replace(/[^a-z]+/g, ' ').split(' ').filter(x => x).slice(0,5);
   const doAutoguess = () => {
     autoguesses.forEach(x => submit(x, true));
   };
@@ -209,12 +209,14 @@ function Game(props: GameProps) {
       setHint("Not a valid word");
       return;
     }
-    for (const g of guesses) {
-      const c = clue(g, target);
-      const feedback = violation(props.difficulty, c, guess);
-      if (feedback) {
-        setHint(feedback);
-        return;
+    if (!autoing) {
+      for (const g of guesses) {
+        const c = clue(g, target);
+        const feedback = violation(props.difficulty, c, guess);
+        if (feedback) {
+          setHint(feedback);
+          return;
+        }
       }
     }
     setGuesses((guesses) => guesses.concat([guess]));

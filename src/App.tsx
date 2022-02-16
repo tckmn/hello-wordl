@@ -199,8 +199,9 @@ function App() {
             />
             <label htmlFor="enter-left-setting">"Enter" on left side</label>
           </div>
-          <div className="Settings-setting">
+          <div className="Settings-setting" style={{flexDirection: 'column'}}>
             <label htmlFor="autoguess-setting">Automatically guess at start of game:</label>
+            <br/>
             <textarea
               name="autoguess-setting"
               id="autoguess-setting"
