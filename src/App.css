@@ -402,3 +402,7 @@ a:active {
 .App-about {
   max-width: 500px;
 }
+
+.Settings {
+  width: 500px;
+}
