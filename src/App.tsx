@@ -71,18 +71,20 @@ function App() {
 
   return (
     <div className={"App-container" + (colorBlind ? " color-blind" : "")}>
-      <h1>
-          speedle
-      </h1>
-      <div className="top-right">
-        {page !== "game" ? (
-          link("❌", "Close", "game")
-        ) : (
-          <>
-            {link("❓", "About", "about")}
-            {link("⚙️", "Settings", "settings")}
-          </>
-        )}
+      <div className="topwrap">
+        <h1>
+            speedle
+        </h1>
+        <div className="top-right">
+          {page !== "game" ? (
+            link("❌", "Close", "game")
+          ) : (
+            <>
+              {link("❓", "About", "about")}
+              {link("⚙️", "Settings", "settings")}
+            </>
+          )}
+        </div>
       </div>
       {/*
       <div
@@ -224,6 +226,7 @@ function App() {
           /[BE]/g,
           (x) => (enterLeft ? "EB" : "BE")["BE".indexOf(x)]
         )}
+        noev={page === 'settings'}
       />
     </div>
   );

@@ -33,6 +33,7 @@ interface GameProps {
   runlen: number;
   keyboardLayout: string;
   autoguess: string;
+  noev: boolean;
 }
 
 const targets = targetList.slice(0, targetList.indexOf("murky") + 1); // Words no rarer than this one
@@ -227,7 +228,9 @@ function Game(props: GameProps) {
         challenge ? "play a random game" : "play again"
       })`;
 
-    if (guess === target) {
+    if (autoing) {
+      // nop (TODO what if it's right lmao)
+    } else if (guess === target) {
       setHint(gameOver("won"));
       setGameState(GameState.Won);
       const time = +new Date(), dur = time - times[times.length-1].time;
@@ -238,7 +241,7 @@ function Game(props: GameProps) {
       }]);
       localStorage.setItem('log', (localStorage.getItem('log') || '') + ',' + target + ' ' + dur);
       if (props.autoenter) startNextGame();
-    } else if (guesses.length + 1 === props.maxGuesses && !autoing) {
+    } else if (guesses.length + 1 === props.maxGuesses) {
       setHint(gameOver("lost"));
       setGameState(GameState.Lost);
       setTimes(times => [...times, {
@@ -249,7 +252,7 @@ function Game(props: GameProps) {
       localStorage.setItem('log', (localStorage.getItem('log') || '') + ',' + target + ' 0');
       // if (props.autoenter) startNextGame();
     } else {
-      if (!autoing) setHint("");
+      setHint("");
       speak(describeClue(clue(guess, target)));
     }
     return 1;
@@ -260,10 +263,12 @@ function Game(props: GameProps) {
     props.difficulty === Difficulty.Hard ? 'H' :
     props.difficulty === Difficulty.UltraHard ? 'U' : '';
   const autostring = `a${props.autoenter ? 1 : 0}${autoguesses.length}`;
-  const mode = `v01-${props.runlen}-${diffstring}-${autostring}`;
+  const mode = `v01-${diffstring}${wordLength}x${props.runlen}-${autostring}`;
 
+  const noev = props.noev;
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
+      if (noev) return;
       if (!e.ctrlKey && !e.metaKey) {
         onKey(e.key);
       }
@@ -275,7 +280,7 @@ function Game(props: GameProps) {
     return () => {
       document.removeEventListener("keydown", onKeyDown);
     };
-  }, [currentGuess, gameState]);
+  }, [currentGuess, gameState, noev]);
 
   let letterInfo = new Map<string, Clue>();
   const tableRows = Array(props.maxGuesses)
