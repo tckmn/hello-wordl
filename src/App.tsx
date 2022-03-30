@@ -47,6 +47,8 @@ function App() {
   const [enterLeft, setEnterLeft] = useSetting<boolean>("enter-left", false);
   const [autoguess, setAutoguess] = useSetting<string>("autoguess", '');
   const [firstKeyTiming, setFirstKeyTiming] = useSetting<boolean>("firstkey", true);
+  const [delay, setDelay] = useSetting<number>("delay", 0);
+  const [penalty, setPenalty] = useSetting<number>("penalty", 0);
 
   useEffect(() => {
     document.body.className = dark ? "dark" : "";
@@ -154,9 +156,29 @@ function App() {
               id="runlen-setting"
               type="number"
               value={runlen}
-              onChange={(e) => setRunlen(parseInt(e.target.value))}
+              onChange={(e) => setRunlen(parseInt(e.target.value) || 10)}
             />
             <label htmlFor="runlen-setting">Run length</label>
+          </div>
+          <div className="Settings-setting">
+            <input
+              id="delay-setting"
+              type="number"
+              value={delay}
+              step="0.1"
+              onChange={(e) => setDelay(Math.round(parseFloat(e.target.value)*10)/10)}
+            />
+            <label htmlFor="delay-setting">Guess delay</label>
+          </div>
+          <div className="Settings-setting">
+            <input
+              id="penalty-setting"
+              type="number"
+              value={penalty}
+              step="0.1"
+              onChange={(e) => setPenalty(Math.round(parseFloat(e.target.value)*10)/10)}
+            />
+            <label htmlFor="penalty-setting">Guess penalty</label>
           </div>
           <div className="Settings-setting">
             <input
@@ -233,6 +255,8 @@ function App() {
         runlen={runlen}
         autoguess={autoguess}
         firstKeyTiming={firstKeyTiming}
+        delay={delay}
+        penalty={penalty}
         keyboardLayout={keyboard.replaceAll(
           /[BE]/g,
           (x) => (enterLeft ? "EB" : "BE")["BE".indexOf(x)]

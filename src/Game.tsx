@@ -35,6 +35,8 @@ interface GameProps {
   autoguess: string;
   noev: boolean;
   firstKeyTiming: boolean;
+  delay: number;
+  penalty: number;
 }
 
 const targets = targetList.slice(0, targetList.indexOf("murky") + 1); // Words no rarer than this one
@@ -110,6 +112,7 @@ function Game(props: GameProps) {
     word: '',
     time: +new Date(),
     firstKey: +new Date(),
+    penalty: 0,
     correct: true
   }]);
   const [firstKey, setFirstKey] = useState<number | undefined>(undefined);
@@ -212,6 +215,7 @@ function Game(props: GameProps) {
         word: target,
         time: time,
         firstKey: firstKey ?? time,
+        penalty: guesses.length * props.penalty,
         correct
       }]);
       localStorage.setItem('log', (localStorage.getItem('log') || '') + ',' + target + ' ' + (correct ? dur : 0));

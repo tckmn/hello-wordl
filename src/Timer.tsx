@@ -16,6 +16,7 @@ export interface Time {
   word: string,
   time: number,
   firstKey: number,
+  penalty: number,
   correct: boolean
 }
 
@@ -98,7 +99,7 @@ export function Timer2(props: Timer2Props) {
     correct: true
   } : {
     word: t.word,
-    time: (t.time - props.times[i-1].time) / 1000,
+    time: (t.time - props.times[i-1].time) / 1000 + t.penalty,
     bonus: (t.firstKey - props.times[i-1].time) / 1000,
     correct: t.correct
   }).slice(1);
