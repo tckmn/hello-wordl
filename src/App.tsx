@@ -168,7 +168,7 @@ function App() {
               step="0.1"
               onChange={(e) => setDelay(Math.round(parseFloat(e.target.value)*10)/10)}
             />
-            <label htmlFor="delay-setting">Guess delay</label>
+            <label htmlFor="delay-setting">Guess delay (seconds)</label>
           </div>
           <div className="Settings-setting">
             <input
@@ -178,7 +178,7 @@ function App() {
               step="0.1"
               onChange={(e) => setPenalty(Math.round(parseFloat(e.target.value)*10)/10)}
             />
-            <label htmlFor="penalty-setting">Guess penalty</label>
+            <label htmlFor="penalty-setting">Guess penalty (seconds)</label>
           </div>
           <div className="Settings-setting">
             <input

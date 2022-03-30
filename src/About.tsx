@@ -22,14 +22,16 @@ export function About() {
         which you can change in the settings.
         The speedrun timer displays a code
         which describes these parameters.
-        The default is <code>v01-N5x10-a00</code>.
+        The default is <code>v01-N5x10</code>.
       </p>
       <ul style={{textAlign: 'left'}}>
         <li><code>v01</code> is the version, which is currently always v01.</li>
         <li><code>N</code> is the difficulty: N for normal, H for hard, and U for ultra hard.</li>
         <li><code>5</code> is the word length.</li>
         <li><code>x10</code> is the length of the speedrun (how many wordles you have to solve).</li>
-        <li><code>a00</code> indicates which autoguessing features are enabled. The first digit is 1 if you have "automatically press enter" turned on and 0 otherwise, and the second digit is the number of autoguesses you have.</li>
+        <li><code>-a<i>XY</i></code>, if present, indicates which autoguessing features are enabled. The first digit (X) is 1 if you have "automatically press enter" turned on and 0 otherwise, and the second digit (Y) is the number of autoguesses you have.</li>
+        <li><code>-d<i>X</i></code>, if present, indicates the amount of delay time after each guess, measured in 10ths of a second.</li>
+        <li><code>-p<i>X</i></code>, if present, indicates the amount of penalty time added for each wrong guess, measured in 10ths of a second.</li>
       </ul>
       <hr />
       <p>
