@@ -37,6 +37,7 @@ interface GameProps {
   firstKeyTiming: boolean;
   delay: number;
   penalty: number;
+  chlink: any; // TODO lol
 }
 
 const targets = targetList.slice(0, targetList.indexOf("murky") + 1); // Words no rarer than this one
@@ -401,6 +402,7 @@ function Game(props: GameProps) {
         onKey={onKey}
       />
       <div className="Game-seed-info">
+        {props.chlink}.
         forked from
         {" "}
         <a href="https://hellowordl.net">hello wordl</a>

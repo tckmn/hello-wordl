@@ -29,7 +29,7 @@ function useSetting<T>(
 const todaySeed = new Date().toISOString().replace(/-/g, "").slice(0, 8);
 
 function App() {
-  type Page = "game" | "about" | "settings";
+  type Page = "game" | "about" | "settings" | "changelog";
   const [page, setPage] = useState<Page>("game");
   const prefersDark =
     window.matchMedia &&
@@ -245,6 +245,27 @@ function App() {
           </div>
         </div>
       )}
+      {page === "changelog" && (
+        <div className="App-changelog">
+          <p><strong>2022-03-30</strong></p>
+          <ul>
+            <li>Added "delay" option: amount of time to wait after every guess (including correct ones), like in original wordle.</li>
+            <li>Added "penalty" option: on wrong guesses only, adds the given amount of time to your total time, but does not impose any real-time delay.</li>
+          </ul>
+          <p><strong>2022-03-29</strong></p>
+          <ul>
+            <li>Added "first-key timing" option: shows your total time starting from the first keystroke of the first word, instead of the start of the first round.</li>
+          </ul>
+          <p><strong>2022-02-15</strong></p>
+          <ul>
+            <li>Many changes for the first version of speedle that was released unto the world.</li>
+          </ul>
+          <p><strong>2022-02-08</strong></p>
+          <ul>
+            <li>The very first primitive version of speedle was conceived (still accessible via Settings -&gt; Old speedrun timer style).</li>
+          </ul>
+        </div>
+      )}
       <Game
         maxGuesses={maxGuesses}
         hidden={page !== "game"}
@@ -262,6 +283,12 @@ function App() {
           (x) => (enterLeft ? "EB" : "BE")["BE".indexOf(x)]
         )}
         noev={page === 'settings'}
+        chlink={
+          <a href='#'
+             onClick={e => { e.preventDefault(); setPage("changelog") }}>
+               changelog
+          </a>
+        }
       />
     </div>
   );
