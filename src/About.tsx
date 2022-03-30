@@ -17,11 +17,26 @@ export function About() {
         is allegedly based on the TV show <i>Lingo</i>.
       </p>
       <p>
+        There are many different parameters
+        for how the game works,
+        which you can change in the settings.
+        The speedrun timer displays a code
+        which describes these parameters.
+        The default is <code>v01-N5x10-a00</code>.
+      </p>
+      <ul style={{textAlign: 'left'}}>
+        <li><code>v01</code> is the version, which is currently always v01.</li>
+        <li><code>N</code> is the difficulty: N for normal, H for hard, and U for ultra hard.</li>
+        <li><code>5</code> is the word length.</li>
+        <li><code>x10</code> is the length of the speedrun (how many wordles you have to solve).</li>
+        <li><code>a00</code> indicates which autoguessing features are enabled. The first digit is 1 if you have "automatically press enter" turned on and 0 otherwise, and the second digit is the number of autoguesses you have.</li>
+      </ul>
+      <hr />
+      <p>
         You get {maxGuesses} tries to guess a target word.
         <br />
         After each guess, you get Mastermind-style feedback.
       </p>
-      <hr />
       <Row
         rowState={RowState.LockedIn}
         wordLength={4}

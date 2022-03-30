@@ -201,6 +201,16 @@ function Game(props: GameProps) {
     }
   };
 
+  const log = (target: string, correct: boolean) => {
+      const time = +new Date(), dur = time - times[times.length-1].time;
+      setTimes(times => [...times, {
+        word: target,
+        time: time,
+        correct
+      }]);
+      localStorage.setItem('log', (localStorage.getItem('log') || '') + ',' + target + ' ' + (correct ? dur : 0));
+  };
+
   const submit = (guess: string, autoing: boolean = false) => {
     if (guess.length !== wordLength) {
       setHint("Too short");
@@ -233,23 +243,12 @@ function Game(props: GameProps) {
     } else if (guess === target) {
       setHint(gameOver("won"));
       setGameState(GameState.Won);
-      const time = +new Date(), dur = time - times[times.length-1].time;
-      setTimes(times => [...times, {
-        word: target,
-        time: time,
-        correct: true
-      }]);
-      localStorage.setItem('log', (localStorage.getItem('log') || '') + ',' + target + ' ' + dur);
+      log(target, true);
       if (props.autoenter) startNextGame();
     } else if (guesses.length + 1 === props.maxGuesses) {
       setHint(gameOver("lost"));
       setGameState(GameState.Lost);
-      setTimes(times => [...times, {
-        word: target,
-        time: +new Date(),
-        correct: false
-      }]);
-      localStorage.setItem('log', (localStorage.getItem('log') || '') + ',' + target + ' 0');
+      log(target, false);
       // if (props.autoenter) startNextGame();
     } else {
       setHint("");
@@ -349,6 +348,7 @@ function Game(props: GameProps) {
               `The answer was ${target.toUpperCase()}. (Enter to play again)`
             );
             setGameState(GameState.Lost);
+            log(target, false);
             (document.activeElement as HTMLElement)?.blur();
           }}
         >
