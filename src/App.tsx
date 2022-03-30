@@ -46,7 +46,7 @@ function App() {
   );
   const [enterLeft, setEnterLeft] = useSetting<boolean>("enter-left", false);
   const [autoguess, setAutoguess] = useSetting<string>("autoguess", '');
-  const [firstKeyTiming, setFirstKeyTiming] = useSetting<boolean>("firstkey", false);
+  const [firstKeyTiming, setFirstKeyTiming] = useSetting<boolean>("firstkey", true);
 
   useEffect(() => {
     document.body.className = dark ? "dark" : "";
