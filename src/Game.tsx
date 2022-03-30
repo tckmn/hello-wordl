@@ -271,8 +271,14 @@ function Game(props: GameProps) {
     props.difficulty === Difficulty.Normal ? 'N' :
     props.difficulty === Difficulty.Hard ? 'H' :
     props.difficulty === Difficulty.UltraHard ? 'U' : '';
-  const autostring = `a${props.autoenter ? 1 : 0}${autoguesses.length}`;
-  const mode = `v01-${diffstring}${wordLength}x${props.runlen}-${autostring}`;
+
+  const mode = `v02-${diffstring}${wordLength}x${props.runlen}` +
+      (props.autoenter || autoguesses.length ?
+       `-a${props.autoenter ? 1 : 0}${autoguesses.length}` : '') +
+      (props.delay ?
+       `-d${Math.round(props.delay*10)}` : '') +
+      (props.penalty ?
+       `-p${Math.round(props.penalty*10)}` : '');
 
   const noev = props.noev;
   useEffect(() => {
