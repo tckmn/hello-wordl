@@ -34,6 +34,7 @@ interface GameProps {
   keyboardLayout: string;
   autoguess: string;
   noev: boolean;
+  firstKeyTiming: boolean;
 }
 
 const targets = targetList.slice(0, targetList.indexOf("murky") + 1); // Words no rarer than this one
@@ -108,8 +109,10 @@ function Game(props: GameProps) {
   const [times, setTimes] = useState<Time[]>([{
     word: '',
     time: +new Date(),
+    firstKey: +new Date(),
     correct: true
   }]);
+  const [firstKey, setFirstKey] = useState<number | undefined>(undefined);
   const currentSeedParams = () =>
     `?seed=${seed}&length=${wordLength}&game=${gameNumber}`;
   useEffect(() => {
@@ -137,6 +140,7 @@ function Game(props: GameProps) {
     setCurrentGuess("");
     setGameState(GameState.Playing);
     setGameNumber((x) => x + 1);
+    setFirstKey(undefined);
     doAutoguess();
   };
 
@@ -183,6 +187,7 @@ function Game(props: GameProps) {
     }
     if (guesses.length === props.maxGuesses) return;
     if (/^[a-z]$/i.test(key)) {
+      setFirstKey(k => k ?? +new Date());
       let failed = false;
       if (props.autoenter && currentGuess.length === wordLength - 1) {
         if (submit(currentGuess + key.toLowerCase()) === 1) return;
@@ -206,6 +211,7 @@ function Game(props: GameProps) {
       setTimes(times => [...times, {
         word: target,
         time: time,
+        firstKey: firstKey ?? time,
         correct
       }]);
       localStorage.setItem('log', (localStorage.getItem('log') || '') + ',' + target + ' ' + (correct ? dur : 0));
@@ -367,7 +373,7 @@ function Game(props: GameProps) {
         {!props.topbar && <div
           className="Game-new-sidebar"
         >
-          <Timer2 count={props.runlen} times={times} mode={mode} />
+          <Timer2 count={props.runlen} times={times} mode={mode} firstKeyTiming={props.firstKeyTiming} />
         </div>}
       </div>
       <p

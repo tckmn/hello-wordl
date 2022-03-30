@@ -9,11 +9,13 @@ interface Timer2Props {
   count: number;
   times: Time[];
   mode: string;
+  firstKeyTiming: boolean;
 }
 
 export interface Time {
   word: string,
   time: number,
+  firstKey: number,
   correct: boolean
 }
 
@@ -85,35 +87,39 @@ function clamp(lo: number, hi: number, x: number) {
 export function Timer2(props: Timer2Props) {
   const best = useRef({
     count: props.count,
-    time: 0
+    time: 0,
+    firstKeyTime: 0
   });
 
   const diffs = props.times.map((t, i) => i === 0 ? {
     word: '',
     time: 0,
+    bonus: 0,
     correct: true
   } : {
     word: t.word,
     time: (t.time - props.times[i-1].time) / 1000,
+    bonus: (t.firstKey - props.times[i-1].time) / 1000,
     correct: t.correct
   }).slice(1);
 
-  const goodtimes = diffs.reduce((acc, t) => (
-    t.correct ? acc.concat(t.time) :
-    acc.length ? acc.slice(0, -1).concat(acc[acc.length-1] + t.time) :
-    acc
-  ), [] as number[]);
+  const fromIdx = diffs.reduce((acc, t, idx) => (
+    t.correct ? acc.concat(idx) : acc
+  ), [] as number[]).slice(-props.count, -props.count + 1)[0];
 
   const testrange = diffs.slice(-10).map(t => t.time),
         slowest = Math.max.apply(0, testrange),
         fastest = Math.min.apply(0, testrange),
-        total = goodtimes.length >= props.count ?
-          goodtimes.slice(-props.count).reduce((x,y) => x+y) : undefined;
+        total = fromIdx === undefined ? undefined :
+          diffs.slice(fromIdx).reduce((x,y) => x+y.time, 0),
+        firstKeyTotal = total === undefined ? undefined :
+          total - diffs[fromIdx].bonus;
 
   if (best.current.count !== props.count) {
     best.current = {
       count: props.count,
-      time: 0
+      time: 0,
+      firstKeyTime: 0
     };
   }
 
@@ -121,13 +127,17 @@ export function Timer2(props: Timer2Props) {
     best.current.time = total;
   }
 
+  if (firstKeyTotal !== undefined && (best.current.firstKeyTime === 0 || firstKeyTotal < best.current.firstKeyTime)) {
+    best.current.firstKeyTime = firstKeyTotal;
+  }
+
   return (
     <div className="Game-timer2" aria-hidden="true">
       <div className="Game-timer2-times">
-        {diffs.map(t => {
+        {diffs.map((t, i) => {
           const rel = clamp(0, 1, 1-(t.time-fastest)/(slowest-fastest));
           return (
-            <div className={"Game-timer2-round Game-timer2-" + (t.correct ? "correct" : "incorrect")}>
+            <div key={i} className={"Game-timer2-round Game-timer2-" + (t.correct ? "correct" : "incorrect")}>
               <div className="Game-timer2-word">
                 {t.word.toUpperCase()}
               </div>
@@ -150,6 +160,17 @@ export function Timer2(props: Timer2Props) {
           best: {best.current.time ? best.current.time.toFixed(2) : ''}
         </span>
       </div>
+      {props.firstKeyTiming ?
+        <div className="Game-timer2-stats">
+          <span>
+            {firstKeyTotal ? `(${firstKeyTotal.toFixed(2)})` : ''}
+          </span>
+          <span className="spacer"></span>
+          <span>
+            {best.current.firstKeyTime ? `(${best.current.firstKeyTime.toFixed(2)})` : ''}
+          </span>
+        </div>
+      : undefined}
       <div className="Game-timer2-stats">
         <span className="spacer"></span>
         <span>{props.mode}</span>

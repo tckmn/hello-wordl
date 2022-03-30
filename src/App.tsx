@@ -46,6 +46,7 @@ function App() {
   );
   const [enterLeft, setEnterLeft] = useSetting<boolean>("enter-left", false);
   const [autoguess, setAutoguess] = useSetting<string>("autoguess", '');
+  const [firstKeyTiming, setFirstKeyTiming] = useSetting<boolean>("firstkey", false);
 
   useEffect(() => {
     document.body.className = dark ? "dark" : "";
@@ -141,6 +142,15 @@ function App() {
           </div>
           <div className="Settings-setting">
             <input
+              id="firstkey-setting"
+              type="checkbox"
+              checked={firstKeyTiming}
+              onChange={() => setFirstKeyTiming((x: boolean) => !x)}
+            />
+            <label htmlFor="firstkey-setting">First-key timing</label>
+          </div>
+          <div className="Settings-setting">
+            <input
               id="runlen-setting"
               type="number"
               value={runlen}
@@ -222,6 +232,7 @@ function App() {
         autoenter={autoenter}
         runlen={runlen}
         autoguess={autoguess}
+        firstKeyTiming={firstKeyTiming}
         keyboardLayout={keyboard.replaceAll(
           /[BE]/g,
           (x) => (enterLeft ? "EB" : "BE")["BE".indexOf(x)]
