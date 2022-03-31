@@ -38,6 +38,8 @@ interface GameProps {
   firstKeyTiming: boolean;
   delay: number;
   penalty: number;
+  blind: boolean;
+  nokbd: boolean;
   chlink: any; // TODO lol
 }
 
@@ -151,6 +153,19 @@ function Game(props: GameProps) {
     setFirstKey(undefined);
     doAutoguess();
   };
+  const newWithLength = (length: (_: number) => number) => {
+    resetRng();
+    setGameNumber(1);
+    setGameState(GameState.Playing);
+    setGuesses([]);
+    setCurrentGuess("");
+    setWordLength(pre => {
+        const post = length(pre);
+        setTarget(randomTarget(post));
+        setHint(`${post} letters`);
+        return post;
+    });
+  };
 
   const autoguesses =
     props.autoguess.toLowerCase().replace(/[^a-z]+/g, ' ').split(' ').filter(x => x).slice(0,5);
@@ -186,6 +201,8 @@ function Game(props: GameProps) {
     setHint(url);
   }
 
+  const inGame = gameState === GameState.Playing &&
+      (guesses.length > 0 || currentGuess !== "" || challenge !== "");
   const onKey = (key: string) => {
     if (gameState !== GameState.Playing) {
       if (key === "Enter") {
@@ -210,6 +227,10 @@ function Game(props: GameProps) {
       setHint("");
     } else if (key === "Enter") {
       submit(currentGuess);
+    } else if (!inGame && key === "ArrowLeft") {
+      newWithLength((x: number) => Math.max(x-1, minLength));
+    } else if (!inGame && key === "ArrowRight") {
+      newWithLength((x: number) => Math.min(x+1, maxLength));
     }
   };
 
@@ -321,7 +342,7 @@ function Game(props: GameProps) {
     return () => {
       document.removeEventListener("keydown", onKeyDown);
     };
-  }, [currentGuess, gameState, noev, revealStep]);
+  }, [currentGuess, gameState, noev, revealStep, inGame]);
 
   let letterInfo = new Map<string, Clue>();
   const tableRows = Array(props.maxGuesses)
@@ -352,6 +373,7 @@ function Game(props: GameProps) {
           }
           cluedLetters={cluedLetters}
           revealStep={revealStep}
+          blind={props.blind}
         />
       );
     });
@@ -366,22 +388,9 @@ function Game(props: GameProps) {
           min={minLength}
           max={maxLength}
           id="wordLength"
-          disabled={
-            gameState === GameState.Playing &&
-            (guesses.length > 0 || currentGuess !== "" || challenge !== "")
-          }
+          disabled={inGame}
           value={wordLength}
-          onChange={(e) => {
-            const length = Number(e.target.value);
-            resetRng();
-            setGameNumber(1);
-            setGameState(GameState.Playing);
-            setGuesses([]);
-            setCurrentGuess("");
-            setTarget(randomTarget(length));
-            setWordLength(length);
-            setHint(`${length} letters`);
-          }}
+          onChange={(e) => newWithLength((_: number) => Number(e.target.value))}
         ></input>
         <button
           style={{ flex: "0 0 auto" }}
@@ -422,11 +431,11 @@ function Game(props: GameProps) {
       >
         {hint || `\u00a0`}
       </p>
-      <Keyboard
+      {props.nokbd || <Keyboard
         layout={props.keyboardLayout}
         letterInfo={letterInfo}
         onKey={onKey}
-      />
+      />}
       <div className="Game-seed-info">
         {props.chlink}.
         forked from

@@ -166,7 +166,7 @@ export function Timer2(props: Timer2Props) {
           <span>
             {firstKeyTotal ? `(${firstKeyTotal.toFixed(2)})` : ''}
           </span>
-          <span className="spacer"></span>
+          <span className="spacer">{props.times.filter(x=>x.correct).length-1}/{props.times.length-1}</span>
           <span>
             {best.current.firstKeyTime ? `(${best.current.firstKeyTime.toFixed(2)})` : ''}
           </span>

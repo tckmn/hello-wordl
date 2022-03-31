@@ -53,6 +53,8 @@ function App() {
   const [firstKeyTiming, setFirstKeyTiming] = useSetting<boolean>("firstkey", true);
   const [delay, setDelay] = useSetting<number>("delay", 0);
   const [penalty, setPenalty] = useSetting<number>("penalty", 0);
+  const [blind, setBlind] = useSetting<boolean>("blind", false);
+  const [nokbd, setNokbd] = useSetting<boolean>("nokbd", false);
 
   useEffect(() => {
     document.body.className = dark ? "dark" : "";
@@ -201,7 +203,7 @@ function App() {
               checked={firstKeyTiming}
               onChange={() => setFirstKeyTiming((x: boolean) => !x)}
             />
-            <label htmlFor="firstkey-setting">First-key timing</label>
+            <label htmlFor="firstkey-setting">Show extra data</label>
           </div>
 
           <p className="Settings-label">speedrun settings</p>
@@ -255,10 +257,36 @@ function App() {
             </textarea>
           </div>
 
+          <p className="Settings-label">variant settings</p>
+
+          <div className="Settings-setting">
+            <input
+              id="blind-setting"
+              type="checkbox"
+              checked={blind}
+              onChange={() => setBlind((x: boolean) => !x)}
+            />
+            <label htmlFor="blind-setting">Blind mode</label>
+          </div>
+          <div className="Settings-setting">
+            <input
+              id="nokbd-setting"
+              type="checkbox"
+              checked={nokbd}
+              onChange={() => setNokbd((x: boolean) => !x)}
+            />
+            <label htmlFor="nokbd-setting">Hide keyboard</label>
+          </div>
         </div>
       )}
       {page === "changelog" && (
         <div className="App-changelog">
+          <p><strong>2022-03-31</strong></p>
+          <ul>
+            <li>Added blind and no-keyboard variants. (Blind means the letters disappear after you guess a word.)</li>
+            <li>Renamed first-key timing to "extra data" and also show total number of games this session.</li>
+            <li>Left and right arrow keys change word length.</li>
+          </ul>
           <p><strong>2022-03-30</strong></p>
           <ul>
             <li>Added "delay" option: amount of time to wait after every guess (including correct ones), like in original wordle.</li>
@@ -290,6 +318,8 @@ function App() {
         firstKeyTiming={firstKeyTiming}
         delay={delay}
         penalty={penalty}
+        blind={blind}
+        nokbd={nokbd}
         keyboardLayout={keyboard.replaceAll(
           /[BE]/g,
           (x) => (enterLeft ? "EB" : "BE")["BE".indexOf(x)]

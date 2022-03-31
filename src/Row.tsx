@@ -12,6 +12,7 @@ interface RowProps {
   cluedLetters: CluedLetter[];
   annotation?: string;
   revealStep?: number;
+  blind?: boolean;
 }
 
 export function Row(props: RowProps) {
@@ -42,7 +43,7 @@ export function Row(props: RowProps) {
               : ""
           }
         >
-          {letter}
+          {isLockedIn && props.blind ? '' : letter}
         </td>
       );
     });
