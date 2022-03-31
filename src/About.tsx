@@ -32,6 +32,7 @@ export function About() {
         <li><code>-a<i>XY</i></code>, if present, indicates which autoguessing features are enabled. The first digit (X) is 1 if you have "automatically press enter" turned on and 0 otherwise, and the second digit (Y) is the number of autoguesses you have.</li>
         <li><code>-d<i>X</i></code>, if present, indicates the amount of delay time after each guess, measured in 10ths of a second.</li>
         <li><code>-p<i>X</i></code>, if present, indicates the amount of penalty time added for each wrong guess, measured in 10ths of a second.</li>
+        <li><code>/<i>X</i></code>, if present, indicates that variant X is enabled (B = blind, K = hide keyboard).</li>
       </ul>
       <hr />
       <p>
