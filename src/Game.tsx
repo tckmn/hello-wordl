@@ -185,7 +185,6 @@ function Game(props: GameProps) {
   }
 
   const onKey = (key: string) => {
-    if (props.noev || revealStep !== -1) return;
     if (gameState !== GameState.Playing) {
       if (key === "Enter") {
         startNextGame();
@@ -305,8 +304,10 @@ function Game(props: GameProps) {
       (props.penalty ?
        `-p${Math.round(props.penalty*10)}` : '');
 
+  const noev = props.noev;
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
+      if (noev || revealStep !== -1) return;
       if (!e.ctrlKey && !e.metaKey) {
         onKey(e.key);
       }
@@ -318,7 +319,7 @@ function Game(props: GameProps) {
     return () => {
       document.removeEventListener("keydown", onKeyDown);
     };
-  }, [currentGuess, gameState]);
+  }, [currentGuess, gameState, noev, revealStep]);
 
   let letterInfo = new Map<string, Clue>();
   const tableRows = Array(props.maxGuesses)
