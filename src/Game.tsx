@@ -117,6 +117,8 @@ function Game(props: GameProps) {
     correct: true
   }]);
   const [firstKey, setFirstKey] = useState<number | undefined>(undefined);
+  const [revealStep, setRevealStep] = useState<number>(-1);
+
   const currentSeedParams = () =>
     `?seed=${seed}&length=${wordLength}&game=${gameNumber}`;
   useEffect(() => {
@@ -183,6 +185,7 @@ function Game(props: GameProps) {
   }
 
   const onKey = (key: string) => {
+    if (props.noev || revealStep !== -1) return;
     if (gameState !== GameState.Playing) {
       if (key === "Enter") {
         startNextGame();
@@ -192,16 +195,15 @@ function Game(props: GameProps) {
     if (guesses.length === props.maxGuesses) return;
     if (/^[a-z]$/i.test(key)) {
       setFirstKey(k => k ?? +new Date());
-      let failed = false;
-      if (props.autoenter && currentGuess.length === wordLength - 1) {
-        if (submit(currentGuess + key.toLowerCase()) === 1) return;
-        else failed = true;
-      }
       setCurrentGuess((guess) =>
         (guess + key.toLowerCase()).slice(0, wordLength)
       );
+      if (props.autoenter && currentGuess.length === wordLength - 1) {
+        if (submit(currentGuess + key.toLowerCase()) === 1) return;
+      } else {
+        setHint("");
+      }
       tableRef.current?.focus();
-      if (!failed) setHint("");
     } else if (key === "Backspace") {
       setCurrentGuess((guess) => guess.slice(0, -1));
       setHint("");
@@ -241,6 +243,29 @@ function Game(props: GameProps) {
         }
       }
     }
+
+    if (props.delay && !autoing) {
+        setRevealStep(0);
+        let start: number | undefined = undefined;
+        const fn = (t: number) => {
+            if (start === undefined) start = t;
+            const step = Math.ceil(((t - start) / 1000) / props.delay * 5);
+            if (step === 6) {
+                setRevealStep(-1);
+                submitVerified(guess, autoing);
+            } else {
+                setRevealStep(step);
+                requestAnimationFrame(fn);
+            }
+        };
+        requestAnimationFrame(fn);
+    } else {
+        submitVerified(guess, autoing);
+    }
+    return 1;
+  };
+
+  const submitVerified = (guess: string, autoing: boolean) => {
     setGuesses((guesses) => guesses.concat([guess]));
     setCurrentGuess((guess) => "");
 
@@ -265,7 +290,6 @@ function Game(props: GameProps) {
       setHint("");
       speak(describeClue(clue(guess, target)));
     }
-    return 1;
   };
 
   const diffstring =
@@ -273,7 +297,7 @@ function Game(props: GameProps) {
     props.difficulty === Difficulty.Hard ? 'H' :
     props.difficulty === Difficulty.UltraHard ? 'U' : '';
 
-  const mode = `v02-${diffstring}${wordLength}x${props.runlen}` +
+  const mode = `v01-${diffstring}${wordLength}x${props.runlen}` +
       (props.autoenter || autoguesses.length ?
        `-a${props.autoenter ? 1 : 0}${autoguesses.length}` : '') +
       (props.delay ?
@@ -281,10 +305,8 @@ function Game(props: GameProps) {
       (props.penalty ?
        `-p${Math.round(props.penalty*10)}` : '');
 
-  const noev = props.noev;
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
-      if (noev) return;
       if (!e.ctrlKey && !e.metaKey) {
         onKey(e.key);
       }
@@ -296,7 +318,7 @@ function Game(props: GameProps) {
     return () => {
       document.removeEventListener("keydown", onKeyDown);
     };
-  }, [currentGuess, gameState, noev]);
+  }, [currentGuess, gameState]);
 
   let letterInfo = new Map<string, Clue>();
   const tableRows = Array(props.maxGuesses)
@@ -326,6 +348,7 @@ function Game(props: GameProps) {
               : RowState.Pending
           }
           cluedLetters={cluedLetters}
+          revealStep={revealStep}
         />
       );
     });

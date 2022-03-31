@@ -409,3 +409,5 @@ a:active {
 
 .App-changelog { text-align: left; }
 .App-changelog li { margin: 0.5rem; }
+
+.Row-revealing { transition: 0.5s background-color; }
