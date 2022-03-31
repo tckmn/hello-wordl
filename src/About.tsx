@@ -6,7 +6,7 @@ export function About() {
   return (
     <div className="App-about">
       <p>
-        <i>speedle</i> is a fork of{' '}
+        <i>{gameName}</i> is a fork of{' '}
         <i><a href="https://hellowordl.net">hello wordl</a></i>{' '}
         by <a href="https://twitter.com/chordbug">Lynn / @chordbug</a>,
         which is a remake of the word game{" "}
