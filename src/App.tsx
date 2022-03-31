@@ -110,6 +110,7 @@ function App() {
       {page === "about" && <About />}
       {page === "settings" && (
         <div className="Settings">
+
           <div className="Settings-setting">
             <input
               id="dark-setting"
@@ -127,62 +128,6 @@ function App() {
               onChange={() => setColorBlind((x: boolean) => !x)}
             />
             <label htmlFor="colorblind-setting">High-contrast colors</label>
-          </div>
-          <div className="Settings-setting">
-            <input
-              id="topbar-setting"
-              type="checkbox"
-              checked={topbar}
-              onChange={() => setTopbar((x: boolean) => !x)}
-            />
-            <label htmlFor="topbar-setting">Old speedrun timer style</label>
-          </div>
-          <div className="Settings-setting">
-            <input
-              id="autoenter-setting"
-              type="checkbox"
-              checked={autoenter}
-              onChange={() => setAutoenter((x: boolean) => !x)}
-            />
-            <label htmlFor="autoenter-setting">Automatically press Enter</label>
-          </div>
-          <div className="Settings-setting">
-            <input
-              id="firstkey-setting"
-              type="checkbox"
-              checked={firstKeyTiming}
-              onChange={() => setFirstKeyTiming((x: boolean) => !x)}
-            />
-            <label htmlFor="firstkey-setting">First-key timing</label>
-          </div>
-          <div className="Settings-setting">
-            <input
-              id="runlen-setting"
-              type="number"
-              value={runlen}
-              onChange={(e) => setRunlen(parseInt(e.target.value) || 10)}
-            />
-            <label htmlFor="runlen-setting">Run length</label>
-          </div>
-          <div className="Settings-setting">
-            <input
-              id="delay-setting"
-              type="number"
-              value={delay}
-              step="0.1"
-              onChange={(e) => setDelay(Math.round(parseFloat(e.target.value)*10)/10)}
-            />
-            <label htmlFor="delay-setting">Guess delay (seconds)</label>
-          </div>
-          <div className="Settings-setting">
-            <input
-              id="penalty-setting"
-              type="number"
-              value={penalty}
-              step="0.1"
-              onChange={(e) => setPenalty(Math.round(parseFloat(e.target.value)*10)/10)}
-            />
-            <label htmlFor="penalty-setting">Guess penalty (seconds)</label>
           </div>
           <div className="Settings-setting">
             <input
@@ -237,6 +182,68 @@ function App() {
             />
             <label htmlFor="enter-left-setting">"Enter" on left side</label>
           </div>
+
+          <p className="Settings-label">timer settings</p>
+
+          <div className="Settings-setting">
+            <input
+              id="topbar-setting"
+              type="checkbox"
+              checked={topbar}
+              onChange={() => setTopbar((x: boolean) => !x)}
+            />
+            <label htmlFor="topbar-setting">Old speedrun timer style</label>
+          </div>
+          <div className="Settings-setting">
+            <input
+              id="firstkey-setting"
+              type="checkbox"
+              checked={firstKeyTiming}
+              onChange={() => setFirstKeyTiming((x: boolean) => !x)}
+            />
+            <label htmlFor="firstkey-setting">First-key timing</label>
+          </div>
+
+          <p className="Settings-label">speedrun settings</p>
+
+          <div className="Settings-setting">
+            <input
+              id="runlen-setting"
+              type="number"
+              value={runlen}
+              onChange={(e) => setRunlen(parseInt(e.target.value) || 10)}
+            />
+            <label htmlFor="runlen-setting">Run length</label>
+          </div>
+          <div className="Settings-setting">
+            <input
+              id="delay-setting"
+              type="number"
+              value={delay}
+              step="0.1"
+              onChange={(e) => setDelay(Math.round(parseFloat(e.target.value)*10)/10)}
+            />
+            <label htmlFor="delay-setting">Guess delay (seconds)</label>
+          </div>
+          <div className="Settings-setting">
+            <input
+              id="penalty-setting"
+              type="number"
+              value={penalty}
+              step="0.1"
+              onChange={(e) => setPenalty(Math.round(parseFloat(e.target.value)*10)/10)}
+            />
+            <label htmlFor="penalty-setting">Guess penalty (seconds)</label>
+          </div>
+          <div className="Settings-setting">
+            <input
+              id="autoenter-setting"
+              type="checkbox"
+              checked={autoenter}
+              onChange={() => setAutoenter((x: boolean) => !x)}
+            />
+            <label htmlFor="autoenter-setting">Automatically press Enter</label>
+          </div>
           <div className="Settings-setting" style={{flexDirection: 'column'}}>
             <label htmlFor="autoguess-setting">Automatically guess at start of game:</label>
             <textarea
@@ -247,6 +254,7 @@ function App() {
             >
             </textarea>
           </div>
+
         </div>
       )}
       {page === "changelog" && (
