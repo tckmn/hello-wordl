@@ -234,6 +234,25 @@ function Game(props: GameProps) {
     }
   };
 
+  const diffstring =
+    props.difficulty === Difficulty.Normal ? 'N' :
+    props.difficulty === Difficulty.Hard ? 'H' :
+    props.difficulty === Difficulty.UltraHard ? 'U' : '';
+
+  const variants =
+    (props.blind ? 'B' : '') +
+    (props.nokbd ? 'K' : '');
+
+  const mode = `v01-${diffstring}${wordLength}x${props.runlen}` +
+      (props.autoenter || autoguesses.length ?
+       `-a${props.autoenter ? 1 : 0}${autoguesses.length}` : '') +
+      (props.delay ?
+       `-d${Math.round(props.delay*10)}` : '') +
+      (props.penalty ?
+       `-p${Math.round(props.penalty*10)}` : '') +
+      (variants ?
+       `/${variants}` : '');
+
   const log = (target: string, correct: boolean) => {
       const time = +new Date(), dur = time - times[times.length-1].time;
       setTimes(times => [...times, {
@@ -243,7 +262,9 @@ function Game(props: GameProps) {
         penalty: guesses.length * props.penalty,
         correct
       }]);
-      localStorage.setItem('log', (localStorage.getItem('log') || '') + ',' + target + ' ' + (correct ? dur : 0));
+      localStorage.setItem('log_'+mode,
+                           (localStorage.getItem('log_'+mode) || '') +
+                               ',' + target + ' ' + (correct ? dur : 0));
   };
 
   const submit = (guess: string, autoing: boolean = false) => {
@@ -313,25 +334,6 @@ function Game(props: GameProps) {
       speak(describeClue(clue(guess, target)));
     }
   };
-
-  const diffstring =
-    props.difficulty === Difficulty.Normal ? 'N' :
-    props.difficulty === Difficulty.Hard ? 'H' :
-    props.difficulty === Difficulty.UltraHard ? 'U' : '';
-
-  const variants =
-    (props.blind ? 'B' : '') +
-    (props.nokbd ? 'K' : '');
-
-  const mode = `v01-${diffstring}${wordLength}x${props.runlen}` +
-      (props.autoenter || autoguesses.length ?
-       `-a${props.autoenter ? 1 : 0}${autoguesses.length}` : '') +
-      (props.delay ?
-       `-d${Math.round(props.delay*10)}` : '') +
-      (props.penalty ?
-       `-p${Math.round(props.penalty*10)}` : '') +
-      (variants ?
-       `/${variants}` : '');
 
   const noev = props.noev;
   useEffect(() => {
