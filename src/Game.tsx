@@ -51,14 +51,6 @@ const limitLength = (n: number) =>
   n >= minLength && n <= maxLength ? n : defaultLength;
 
 function randomTarget(wordLength: number): string {
-  if (wordLength === 5) {
-      const f = localStorage.getItem('fooled');
-      if (!f) {
-          return 'april';
-      } else if (f === '1') {
-          return 'fools';
-      }
-  }
   const eligible = targets.filter((word) => word.length === wordLength);
   let candidate: string;
   do {
@@ -262,8 +254,6 @@ function Game(props: GameProps) {
        `/${variants}` : '');
 
   const log = (target: string, correct: boolean) => {
-      if (target === 'april') localStorage.setItem('fooled', '1');
-      if (target === 'fools') localStorage.setItem('fooled', '2');
       const time = +new Date(), dur = time - times[times.length-1].time;
       setTimes(times => [...times, {
         word: target,
@@ -282,7 +272,7 @@ function Game(props: GameProps) {
       setHint("Too short");
       return;
     }
-    if (!dictionary.includes(guess) && guess !== 'april' && guess !== 'fools') {
+    if (!dictionary.includes(guess)) {
       setHint("Not a valid word");
       return;
     }
