@@ -1,5 +1,5 @@
 import "./App.css";
-import { maxGuesses, seed, urlParam } from "./util";
+import { maxGuesses, seed, urlParam, WordList } from "./util";
 import Game from "./Game";
 import { useEffect, useState } from "react";
 import { About } from "./About";
@@ -56,6 +56,7 @@ function App() {
   const [penalty, setPenalty] = useSetting<number>("penalty", 0);
   const [blind, setBlind] = useSetting<boolean>("blind", false);
   const [nokbd, setNokbd] = useSetting<boolean>("nokbd", false);
+  const [wordlist, setWordlist] = useSetting<string>("wordlist", 'hw');
 
   useEffect(() => {
     document.body.className = dark ? "dark" : "";
@@ -279,6 +280,19 @@ function App() {
             />
             <label htmlFor="nokbd-setting">Hide keyboard</label>
           </div>
+          <div className="Settings-setting">
+            <label htmlFor="wordlist-setting">Wordlist:</label>
+            <select
+              name="wordlist-setting"
+              id="wordlist-setting"
+              value={wordlist}
+              onChange={(e) => setWordlist(e.target.value)}
+            >
+              <option value="hw">hello wordl</option>
+              <option value="nyt">New York Times</option>
+            </select>
+          </div>
+
         </div>
       )}
       <Game
@@ -306,6 +320,7 @@ function App() {
                changelog
           </a>
         }
+        wordlist={wordlist as WordList}
       />
     </div>
   );

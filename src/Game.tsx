@@ -1,22 +1,20 @@
 import { useEffect, useRef, useState } from "react";
 import { Row, RowState } from "./Row";
-import dictionary from "./dictionary.json";
 import { Clue, clue, describeClue, violation } from "./clue";
 import { Timer, Timer2, Time } from "./Timer";
 import { Keyboard } from "./Keyboard";
-import targetList from "./targets.json";
 import {
   describeSeed,
-  dictionarySet,
   Difficulty,
   gameName,
-  pick,
   resetRng,
   seed,
   speak,
   urlParam,
+  WordList,
 } from "./util";
 import { decode, encode } from "./base64";
+import Dictionary from "./Dictionary";
 
 enum GameState {
   Playing,
@@ -41,23 +39,14 @@ interface GameProps {
   blind: boolean;
   nokbd: boolean;
   chlink: any; // TODO lol
+  wordlist: WordList;
 }
 
-const targets = targetList.slice(0, targetList.indexOf("murky") + 1); // Words no rarer than this one
 const minLength = 4;
 const defaultLength = 5;
 const maxLength = 11;
 const limitLength = (n: number) =>
   n >= minLength && n <= maxLength ? n : defaultLength;
-
-function randomTarget(wordLength: number): string {
-  const eligible = targets.filter((word) => word.length === wordLength);
-  let candidate: string;
-  do {
-    candidate = pick(eligible);
-  } while (/\*/.test(candidate));
-  return candidate;
-}
 
 function getChallengeUrl(target: string): string {
   return (
@@ -76,7 +65,8 @@ try {
   console.warn(e);
   challengeError = true;
 }
-if (initChallenge && !dictionarySet.has(initChallenge)) {
+// TODO wordlist
+if (initChallenge && !Dictionary.checkWord(WordList.HelloWordl, initChallenge)) {
   initChallenge = "";
   challengeError = true;
 }
@@ -106,8 +96,8 @@ function Game(props: GameProps) {
   const [target, setTarget] = useState(() => {
     resetRng();
     // Skip RNG ahead to the parsed initial game number:
-    for (let i = 1; i < gameNumber; i++) randomTarget(wordLength);
-    return challenge || randomTarget(wordLength);
+    for (let i = 1; i < gameNumber; i++) Dictionary.randomTarget(props.wordlist, wordLength);
+    return challenge || Dictionary.randomTarget(props.wordlist, wordLength);
   });
   const [hint, setHint] = useState<string>(
     challengeError
@@ -144,7 +134,7 @@ function Game(props: GameProps) {
     setChallenge("");
     const newWordLength = limitLength(wordLength);
     setWordLength(newWordLength);
-    setTarget(randomTarget(newWordLength));
+    setTarget(Dictionary.randomTarget(props.wordlist, newWordLength));
     setHint("");
     setGuesses([]);
     setCurrentGuess("");
@@ -161,7 +151,7 @@ function Game(props: GameProps) {
     setCurrentGuess("");
     setWordLength(pre => {
         const post = length(pre);
-        setTarget(randomTarget(post));
+        setTarget(Dictionary.randomTarget(props.wordlist, post));
         setHint(`${post} letters`);
         return post;
     });
@@ -241,7 +231,8 @@ function Game(props: GameProps) {
 
   const variants =
     (props.blind ? 'B' : '') +
-    (props.nokbd ? 'K' : '');
+    (props.nokbd ? 'K' : '') +
+    (props.wordlist === WordList.NewYorkTimes ? 'n' : '');
 
   const mode = `v01-${diffstring}${wordLength}x${props.runlen}` +
       (props.autoenter || autoguesses.length ?
@@ -272,7 +263,7 @@ function Game(props: GameProps) {
       setHint("Too short");
       return;
     }
-    if (!dictionary.includes(guess)) {
+    if (!Dictionary.checkWord(props.wordlist, guess)) {
       setHint("Not a valid word");
       return;
     }

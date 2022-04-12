@@ -1,15 +1,17 @@
-import dictionary from "./dictionary.json";
-
 export enum Difficulty {
   Normal,
   Hard,
   UltraHard,
 }
 
+export enum WordList {
+  HelloWordl = 'hw',
+  NewYorkTimes = 'nyt',
+}
+
 export const gameName = "speedle";
 export const maxGuesses = 6;
 
-export const dictionarySet: Set<string> = new Set(dictionary);
 
 function mulberry32(a: number) {
   return function () {
