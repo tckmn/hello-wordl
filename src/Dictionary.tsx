@@ -27,7 +27,7 @@ export default {
     const eligible = lists[wl].targets.filter((word) => word.length === wordLength);
     let candidate: string;
     do {
-      candidate = pick(eligible);
+      candidate = pick(eligible.length ? eligible : lists[wl].targets);
     } while (/\*/.test(candidate));
     return candidate;
   },

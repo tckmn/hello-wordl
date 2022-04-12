@@ -229,12 +229,14 @@ function Game(props: GameProps) {
     props.difficulty === Difficulty.Hard ? 'H' :
     props.difficulty === Difficulty.UltraHard ? 'U' : '';
 
+  const lenstring =
+    props.wordlist === WordList.NewYorkTimes ? '*' : wordLength+'';
+
   const variants =
     (props.blind ? 'B' : '') +
-    (props.nokbd ? 'K' : '') +
-    (props.wordlist === WordList.NewYorkTimes ? 'n' : '');
+    (props.nokbd ? 'K' : '');
 
-  const mode = `v01-${diffstring}${wordLength}x${props.runlen}` +
+  const mode = `v01-${diffstring}${lenstring}x${props.runlen}` +
       (props.autoenter || autoguesses.length ?
        `-a${props.autoenter ? 1 : 0}${autoguesses.length}` : '') +
       (props.delay ?

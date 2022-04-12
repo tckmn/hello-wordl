@@ -1,6 +1,10 @@
 export function Changelog() {
   return (
     <div className="App-changelog">
+      <p><strong>2022-04-12</strong></p>
+      <ul>
+        <li>Wordlist selection: there is now an option for the New York Times wordlist.</li>
+      </ul>
       <p><strong>2022-03-31</strong></p>
       <ul>
         <li>Added blind and no-keyboard variants. (Blind means the letters disappear after you guess a word.)</li>
