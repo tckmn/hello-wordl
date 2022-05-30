@@ -1,6 +1,10 @@
 export function Changelog() {
   return (
     <div className="App-changelog">
+      <p><strong>2022-05-30</strong></p>
+      <ul>
+        <li>Updated New York Times wordlist (the words KORAN and QURAN can now be guessed).</li>
+      </ul>
       <p><strong>2022-04-12</strong></p>
       <ul>
         <li>Wordlist selection: there is now an option for the New York Times wordlist.</li>
