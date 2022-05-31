@@ -34,6 +34,7 @@ interface GameProps {
   autoguess: string;
   noev: boolean;
   firstKeyTiming: boolean;
+  hibest: string;
   delay: number;
   penalty: number;
   blind: boolean;
@@ -420,7 +421,7 @@ function Game(props: GameProps) {
         {!props.topbar && <div
           className="Game-new-sidebar"
         >
-          <Timer2 count={props.runlen} times={times} mode={mode} firstKeyTiming={props.firstKeyTiming} />
+          <Timer2 count={props.runlen} times={times} mode={mode} firstKeyTiming={props.firstKeyTiming} hibest={props.hibest} />
         </div>}
       </div>
       <p

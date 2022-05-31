@@ -52,6 +52,7 @@ function App() {
   const [enterLeft, setEnterLeft] = useSetting<boolean>("enter-left", false);
   const [autoguess, setAutoguess] = useSetting<string>("autoguess", '');
   const [firstKeyTiming, setFirstKeyTiming] = useSetting<boolean>("firstkey", true);
+  const [hibest, setHibest] = useSetting<string>("hibest", 'firstkey');
   const [delay, setDelay] = useSetting<number>("delay", 0);
   const [penalty, setPenalty] = useSetting<number>("penalty", 0);
   const [blind, setBlind] = useSetting<boolean>("blind", false);
@@ -208,6 +209,19 @@ function App() {
             />
             <label htmlFor="firstkey-setting">Show extra data</label>
           </div>
+          <div className="Settings-setting">
+            <label htmlFor="hibest-setting">Highlight best:</label>
+            <select
+              name="hibest-setting"
+              id="hibest-setting"
+              value={hibest}
+              onChange={(e) => setHibest(e.target.value)}
+            >
+              <option value="none">None</option>
+              <option value="total">Total time</option>
+              <option value="firstkey">First-key time</option>
+            </select>
+          </div>
 
           <p className="Settings-label">speedrun settings</p>
 
@@ -305,6 +319,7 @@ function App() {
         runlen={runlen}
         autoguess={autoguess}
         firstKeyTiming={firstKeyTiming}
+        hibest={hibest}
         delay={delay}
         penalty={penalty}
         blind={blind}

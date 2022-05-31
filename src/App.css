@@ -297,7 +297,7 @@ a:active {
 
 .Game-timer-bars {
   display: flex;
-  align-items: end;
+  align-items: flex-end;
   justify-content: center;
 }
 
@@ -368,6 +368,10 @@ a:active {
 
 .Game-timer2-incorrect .Game-timer2-word {
   color: hsl(0, 90%, 40%);
+}
+
+.Game-timer2-best {
+  background-color: rgba(0, 255, 128, 0.15);
 }
 
 

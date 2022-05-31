@@ -1,6 +1,11 @@
 export function Changelog() {
   return (
     <div className="App-changelog">
+      <p><strong>2022-05-31</strong></p>
+      <ul>
+        <li>Changing the run length now recalculates best times.</li>
+        <li>Added option to highlight best time in the list of solves.</li>
+      </ul>
       <p><strong>2022-05-30</strong></p>
       <ul>
         <li>Updated New York Times wordlist (the words KORAN and QURAN can now be guessed).</li>
