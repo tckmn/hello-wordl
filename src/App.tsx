@@ -43,7 +43,7 @@ function App() {
   const [colorBlind, setColorBlind] = useSetting<boolean>("colorblind", false);
   const [topbar, setTopbar] = useSetting<boolean>("topbar", false);
   const [autoenter, setAutoenter] = useSetting<boolean>("autoenter", false);
-  const [runlen, setRunlen] = useSetting<number>("runlen", 10);
+  const [morelen, setMorelen] = useSetting<string>("morelen", '10');
   const [difficulty, setDifficulty] = useSetting<number>("difficulty", 0);
   const [keyboard, setKeyboard] = useSetting<string>(
     "keyboard",
@@ -227,12 +227,11 @@ function App() {
 
           <div className="Settings-setting">
             <input
-              id="runlen-setting"
-              type="number"
-              value={runlen}
-              onChange={(e) => setRunlen(parseInt(e.target.value) || 10)}
+              id="morelen-setting"
+              value={morelen}
+              onChange={(e) => setMorelen(e.target.value)}
             />
-            <label htmlFor="runlen-setting">Run length</label>
+            <label htmlFor="morelen-setting">Run lengths</label>
           </div>
           <div className="Settings-setting">
             <input
@@ -316,7 +315,7 @@ function App() {
         colorBlind={colorBlind}
         topbar={topbar}
         autoenter={autoenter}
-        runlen={runlen}
+        morelen={(morelen.match(/\d+/g) ?? ['10']).map(x => parseInt(x))}
         autoguess={autoguess}
         firstKeyTiming={firstKeyTiming}
         hibest={hibest}

@@ -29,7 +29,7 @@ interface GameProps {
   colorBlind: boolean;
   topbar: boolean;
   autoenter: boolean;
-  runlen: number;
+  morelen: number[];
   keyboardLayout: string;
   autoguess: string;
   noev: boolean;
@@ -237,7 +237,7 @@ function Game(props: GameProps) {
     (props.blind ? 'B' : '') +
     (props.nokbd ? 'K' : '');
 
-  const mode = `v01-${diffstring}${lenstring}x${props.runlen}` +
+  const mode = `v01-${diffstring}${lenstring}x${props.morelen[0]}` +
       (props.autoenter || autoguesses.length ?
        `-a${props.autoenter ? 1 : 0}${autoguesses.length}` : '') +
       (props.delay ?
@@ -382,7 +382,7 @@ function Game(props: GameProps) {
 
   return (
     <div className="Game" style={{ display: props.hidden ? "none" : "block" }}>
-      {props.topbar && <Timer count={props.runlen} times={times} />}
+      {props.topbar && <Timer count={props.morelen[0]} times={times} />}
       <div className="Game-options">
         <label htmlFor="wordLength">Letters:</label>
         <input
@@ -421,7 +421,7 @@ function Game(props: GameProps) {
         {!props.topbar && <div
           className="Game-new-sidebar"
         >
-          <Timer2 count={props.runlen} times={times} mode={mode} firstKeyTiming={props.firstKeyTiming} hibest={props.hibest} />
+          <Timer2 morelen={props.morelen} times={times} mode={mode} firstKeyTiming={props.firstKeyTiming} hibest={props.hibest} />
         </div>}
       </div>
       <p
