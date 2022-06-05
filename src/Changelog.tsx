@@ -1,6 +1,10 @@
 export function Changelog() {
   return (
     <div className="App-changelog">
+      <p><strong>2022-06-04</strong></p>
+      <ul>
+        <li>It is now possible to specify multiple run lengths. (The first one is "primary" for highlighting and modestring purposes.)</li>
+      </ul>
       <p><strong>2022-05-31</strong></p>
       <ul>
         <li>Changing the run length now recalculates best times.</li>
