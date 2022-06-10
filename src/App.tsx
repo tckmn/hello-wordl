@@ -315,7 +315,7 @@ function App() {
         colorBlind={colorBlind}
         topbar={topbar}
         autoenter={autoenter}
-        morelen={(morelen.match(/\d+/g) ?? ['10']).map(x => parseInt(x))}
+        morelen={(morelen.match(/[1-9]\d*/g) ?? ['10']).map(x => parseInt(x))}
         autoguess={autoguess}
         firstKeyTiming={firstKeyTiming}
         hibest={hibest}

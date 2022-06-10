@@ -1,6 +1,10 @@
 export function Changelog() {
   return (
     <div className="App-changelog">
+      <p><strong>2022-06-09</strong></p>
+      <ul>
+        <li>Fixed a bug when attempting to set run length to 0.</li>
+      </ul>
       <p><strong>2022-06-04</strong></p>
       <ul>
         <li>It is now possible to specify multiple run lengths. (The first one is "primary" for highlighting and modestring purposes.)</li>
