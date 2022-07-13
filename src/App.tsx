@@ -307,6 +307,8 @@ function App() {
             </select>
           </div>
 
+          <p>{'\u00a0'}</p>
+
         </div>
       )}
       <Game
