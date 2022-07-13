@@ -15,6 +15,10 @@ const lists = {
     dictionary: new Set(dictionary_nyt.concat(targets_nyt)),
     targets: targets_nyt,
   },
+  obs: {
+    dictionary: new Set(dictionary_nyt.concat(targets_nyt)),
+    targets: dictionary_nyt,
+  },
 };
 
 export default {

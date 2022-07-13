@@ -303,6 +303,7 @@ function App() {
             >
               <option value="hw">hello wordl</option>
               <option value="nyt">New York Times</option>
+              <option value="obs">Obscordle</option>
             </select>
           </div>
 

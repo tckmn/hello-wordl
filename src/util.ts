@@ -7,6 +7,7 @@ export enum Difficulty {
 export enum WordList {
   HelloWordl = 'hw',
   NewYorkTimes = 'nyt',
+  Obscordle = 'obs',
 }
 
 export const gameName = "speedle";

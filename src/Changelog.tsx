@@ -1,6 +1,11 @@
 export function Changelog() {
   return (
     <div className="App-changelog">
+      <p><strong>2022-07-13</strong></p>
+      <ul>
+        <li>Updated hello wordl wordlist (the words ADMIN and SIRWAL can now be guessed, and several possible target words were removed).</li>
+        <li>Added an option for Obscordle wordlist, which is just the New York Times list with the complement of possible target words.</li>
+      </ul>
       <p><strong>2022-06-09</strong></p>
       <ul>
         <li>Fixed a bug when attempting to set run length to 0.</li>

@@ -231,7 +231,9 @@ function Game(props: GameProps) {
     props.difficulty === Difficulty.UltraHard ? 'U' : '';
 
   const lenstring =
-    props.wordlist === WordList.NewYorkTimes ? '*' : wordLength+'';
+    props.wordlist === WordList.NewYorkTimes ? '*' :
+    props.wordlist === WordList.Obscordle ? '&' :
+    wordLength+'';
 
   const variants =
     (props.blind ? 'B' : '') +
